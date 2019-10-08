@@ -22,6 +22,7 @@ $(document).ready(function () {
     var database = firebase.database();
 
     var newGame = true;
+    window.snapshotKey;
 
     $(".selectionButtonP1").on("click", function (event) {
         event.preventDefault();
@@ -33,6 +34,12 @@ $(document).ready(function () {
                 dateAdded: firebase.database.ServerValue.TIMESTAMP
             });
             newGame = false;
+
+            database.ref().on("child_added", function (snapshot) { 
+                console.log(snapshot.key);
+                var snapshotKey = snapshot.key;
+                window.snapshotKey = snapshotKey; // maybe I can use this?  this sets the snapshot key to a global variable, supposedly so I can call it below. 
+            });
         }
         else if ($(this).attr("id") === "rock-button1" && !newGame) {
             console.log("rock has been chosen (2nd choice)");
@@ -41,6 +48,8 @@ $(document).ready(function () {
                 choice: choice,
                 dateAdded: firebase.database.ServerValue.TIMESTAMP
             });
+            console.log(window.snapshotKey);
+
         }
         else if ($(this).attr("id") === "paper-button1" && newGame) {
             console.log("Paper has been chosen");

@@ -54,6 +54,10 @@ $(document).ready(function () {
         playerTwoChoice = "";
         playerOneDone = false;
         playerTwoDone = false;
+        $(".selectionButtonP1").attr("style", "visibility: visible");
+        $(".selectionButtonP2").attr("style", "visibility: visible");
+        $("#submit-button1").attr("style", "visibility: visible");
+        $("#submit-button2").attr("style", "visibility: visible");
     }
 
     function firstPlayer() {
@@ -63,6 +67,7 @@ $(document).ready(function () {
             database.ref().push({
                 choice: choice,
             });
+            $("#submit-button1").attr("style", "visibility: hidden");
             $(".player-one-selection").append("<h3 style='color:green';>Confirmed!</h3>")
 
             // DOING ONCE INSTEAD OF ON SOLVED MY ISSUE.  SOMEHOW ONCE ONLY REFERS TO THE CHILD YOU'RE WORKING ON RIGHT NOW.  PREVIOUSLY IT WAS REFERRING TO ALL CHILDREN.
@@ -99,7 +104,7 @@ $(document).ready(function () {
         });
         // Now when this is clicked, the Choice is pushed to firebase (choice becomes permanent)
         $("#submit-button1").on("click", function (event) {
-            $(".selectionButtonP1").unbind("click");
+            $(".selectionButtonP1").attr("style", "visibility: hidden");
             event.preventDefault();
             newGamePush();
             playerOneDone = true;
@@ -115,6 +120,7 @@ $(document).ready(function () {
             database.ref().push({
                 choice: choice,
             });
+            $("#submit-button2").attr("style", "visibility: hidden");
             $(".player-two-selection").append("<h3 style='color:green';>Confirmed!</h3>")
             // DOING ONCE INSTEAD OF ON SOLVED MY ISSUE.  SOMEHOW ONCE ONLY REFERS TO THE CHILD YOU'RE WORKING ON RIGHT NOW.  PREVIOUSLY IT WAS REFERRING TO ALL CHILDREN.
             database.ref().once("child_added").then(function (Snapshot) {
@@ -149,7 +155,7 @@ $(document).ready(function () {
         });
         // Now when this is clicked, the Choice is pushed to firebase (choice becomes permanent)
         $("#submit-button2").on("click", function (event) {
-            
+            $(".selectionButtonP2").attr("style", "visibility: hidden");
             event.preventDefault();
             newGamePush();
             playerTwoDone = true;

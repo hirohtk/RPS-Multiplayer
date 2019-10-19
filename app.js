@@ -191,65 +191,6 @@ $(document).ready(function () {
         
     }
 
-
-    function nextGames() {
-        function notNewGameSet() {
-            database.ref().set({
-                choice: choice,
-                dateAdded: firebase.database.ServerValue.TIMESTAMP
-            });
-            $(".player-one-selection").append("<h3 style='color:green';>Confirmed!</h3>")
-        }
-
-        if ($(this).attr("id") === "rock-button1") {
-            console.log("rock has been chosen (2nd choice)");
-            var choice = "rock";
-
-            $(".player-one-selection").html("<h3>Player one choice: " + choice + "</h3>")
-            $("#submit-button").on("click", function (event) {
-                event.preventDefault();
-                notNewGameSet();
-            });
-
-            console.log("snapshot key is " + window.snapshotKey);
-
-        }
-
-        else if ($(this).attr("id") === "paper-button1") {
-            console.log("Paper has been chosen (2nd choice)");
-            var choice = "paper";
-
-            $(".player-one-selection").html("<h3>Player one choice: " + choice + "</h3>")
-
-            $("#submit-button").on("click", function (event) {
-                event.preventDefault();
-                notNewGameSet();
-            });
-            console.log("snapshot key is " + window.snapshotKey);
-        }
-
-        else if ($(this).attr("id") === "scissors-button1") {
-            console.log("Scissors has been chosen (2nd choice)");
-            var choice = "scissors";
-
-            $(".player-one-selection").html("<h3>Player one choice: " + choice + "</h3>")
-            $("#submit-button").on("click", function (event) {
-                event.preventDefault();
-                notNewGameSet();
-            });
-            console.log("snapshot key is " + window.snapshotKey);
-
-        }
-    }
-    
-        
-
-
-
-
-
-    /*  */
-
 });
 
 

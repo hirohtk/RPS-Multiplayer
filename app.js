@@ -33,8 +33,8 @@ $(document).ready(function () {
     firstPlayerfirstGame();
     secondPlayerFirstGame();
 
-    
-
+    var timer = 5;
+    var intervalId;
     
     //nextGames();
     function validateForBothInputs () {
@@ -48,6 +48,7 @@ $(document).ready(function () {
         $(".player-two-selection").empty();
         $("#winnerIsP1").empty();
         $("#winnerIsP2").empty();
+        $("#tieGame").empty();
     }
 
     function firstPlayerfirstGame() {
@@ -163,11 +164,31 @@ $(document).ready(function () {
             console.log("Player two now has " + player2Wins + " wins.");
         }
         else {
-            alert("Encountered a win condition I didn't expect!")
+            $("#tieGame").html("<h3 style='color:blue';>Answers Tied!</h3>")
         }
-
         
-        setTimeOut(gameReset, 5000);
+        gameEndStart();
+        setTimeout(gameReset, 5000);
+
+        function gameEndStart() {
+            intervalId = setInterval(decrement, 1000); // setting interval.  every 1 second, perform decrements 
+        }
+    
+        function decrement() {
+            
+            timer--; // take one second off from timer
+            $("#gameEndTimer").html("<br><h3> Game Ending in " + timer + " seconds."); 
+    
+            if (timer === 0) {
+                stopTimer(); // stop the timer function
+                $("#gameEndTimer").empty(); 
+            }
+        }
+    
+        function stopTimer() {
+            clearInterval(intervalId);  // emptys cubbyhole, remove setInterval
+        }
+        
     }
 
 

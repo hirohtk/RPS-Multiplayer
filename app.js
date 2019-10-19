@@ -27,6 +27,9 @@ $(document).ready(function () {
     var playerOneChoice;
     var playerTwoChoice;
 
+    var playerOneDone = false;
+    var playerTwoDone = false;
+
     firstPlayerfirstGame();
     secondPlayerFirstGame();
 
@@ -34,7 +37,11 @@ $(document).ready(function () {
 
     
     //nextGames();
-
+    function validateForBothInputs () {
+        if (playerOneDone && playerTwoDone){
+            compareChoices();
+        }
+    }
     function firstPlayerfirstGame() {
         var choice; 
 
@@ -44,14 +51,16 @@ $(document).ready(function () {
             });
             $(".player-one-selection").append("<h3 style='color:green';>Confirmed!</h3>")
 
-            database.ref().on("child_added", function (snapshot) {
-                console.log("snapshot key is " + snapshot.key);
-                var snapshotKey = snapshot.key;
-                window.snapshotKey = snapshotKey; 
-                console.log("firebase: FIRST PLAYER's CHOICE is " + snapshot.val().choice);
-                playerOneChoice = snapshot.val().choice;
-            });
+            // DOING ONCE INSTEAD OF ON SOLVED MY ISSUE.  SOMEHOW ONCE ONLY REFERS TO THE CHILD YOU'RE WORKING ON RIGHT NOW.  PREVIOUSLY IT WAS REFERRING TO ALL CHILDREN.
+            database.ref().once("child_added").then(function (Snapshot) {   
+                console.log("snapshot key is " + Snapshot.key);
+                console.log("firebase: FIRST PLAYER's CHOICE is " + Snapshot.val().choice);
+                console.log("-----------------------------------------------------------")
+                playerOneChoice = Snapshot.val().choice}
+            );
         }
+
+        
         //when this is clicked, modifies Choice variable.  user can keep clicking until they decide their final choice.  
         $(".selectionButtonP1").on("click", function (event) {
             event.preventDefault();
@@ -77,6 +86,8 @@ $(document).ready(function () {
         $("#submit-button1").on("click", function (event) {
             event.preventDefault();
             newGamePush();
+            playerOneDone = true;
+            setTimeout(validateForBothInputs, 500); // NEEDED THIS - 
         });
         
     }
@@ -89,14 +100,14 @@ $(document).ready(function () {
                 choice: choice,
             });
             $(".player-two-selection").append("<h3 style='color:green';>Confirmed!</h3>")
-
-            database.ref().on("child_added", function (snapshot) {
-                console.log("snapshot key is " + snapshot.key);
-                var snapshotKey = snapshot.key;
-                window.snapshotKey = snapshotKey; 
-                console.log("firebase:  SECOND PLAYER's choice is " + snapshot.val().choice);
-                playerTwoChoice = snapshot.val().choice;
-            });
+            // DOING ONCE INSTEAD OF ON SOLVED MY ISSUE.  SOMEHOW ONCE ONLY REFERS TO THE CHILD YOU'RE WORKING ON RIGHT NOW.  PREVIOUSLY IT WAS REFERRING TO ALL CHILDREN.
+            database.ref().once("child_added").then(function (Snapshot) {
+                console.log("snapshot key is " + Snapshot.key);
+                console.log("firebase: SECOND PLAYER's CHOICE is " + Snapshot.val().choice);
+                console.log("-----------------------------------------------------------")
+                playerTwoChoice = Snapshot.val().choice}
+            );
+            
         }
         //when this is clicked, modifies Choice variable.  user can keep clicking until they decide their final choice.  
         $(".selectionButtonP2").on("click", function (event) {
@@ -123,13 +134,15 @@ $(document).ready(function () {
         $("#submit-button2").on("click", function (event) {
             event.preventDefault();
             newGamePush();
+            playerTwoDone = true;
+            setTimeout(validateForBothInputs, 500);
         });
-        
     }
 
-
     function compareChoices() {
-
+        console.log("TIME TO COMPARE CHOICES MENG");
+        console.log("Now comparing... Player One's choice is " + playerOneChoice);
+        console.log("Now comparing... Player Two's choice is " + playerTwoChoice);
     }
 
 

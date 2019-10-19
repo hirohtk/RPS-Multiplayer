@@ -21,34 +21,38 @@ $(document).ready(function () {
     firebase.initializeApp(firebaseConfig);
     var database = firebase.database();
 
-    var newGame = true;
-    //window.snapshotKey;
-
     var player1Wins = 0;
     var player2Wins = 0;
 
-//Player one
-    firstGame();
+    var playerOneChoice;
+    var playerTwoChoice;
+
+    firstPlayerfirstGame();
+    secondPlayerFirstGame();
+
+    
+
     
     //nextGames();
 
-    function firstGame() {
+    function firstPlayerfirstGame() {
         var choice; 
-        
+
         function newGamePush() {
             database.ref().push({
                 choice: choice,
             });
-            newGame = false;
             $(".player-one-selection").append("<h3 style='color:green';>Confirmed!</h3>")
 
             database.ref().on("child_added", function (snapshot) {
                 console.log("snapshot key is " + snapshot.key);
                 var snapshotKey = snapshot.key;
                 window.snapshotKey = snapshotKey; 
+                console.log("firebase: FIRST PLAYER's CHOICE is " + snapshot.val().choice);
+                playerOneChoice = snapshot.val().choice;
             });
         }
-
+        //when this is clicked, modifies Choice variable.  user can keep clicking until they decide their final choice.  
         $(".selectionButtonP1").on("click", function (event) {
             event.preventDefault();
 
@@ -67,16 +71,70 @@ $(document).ready(function () {
                 choice = "scissors";
                 $(".player-one-selection").html("<h3>Player one choice: " + choice + "</h3>")
             }
-            // USER SHOULD BE ABLE TO KEEP CLICKING TO CHANGE THEIR MIND, NEVER GETS TO EXECUTE NEWGAMEPUSH UNLESS SUBMITBUTTON IS CLICKED
-
+            
         });
-
-        $("#submit-button").on("click", function (event) {
+        // Now when this is clicked, the Choice is pushed to firebase (choice becomes permanent)
+        $("#submit-button1").on("click", function (event) {
             event.preventDefault();
             newGamePush();
         });
+        
     }
-    
+
+    function secondPlayerFirstGame() {
+        var choice; 
+
+        function newGamePush() {
+            database.ref().push({
+                choice: choice,
+            });
+            $(".player-two-selection").append("<h3 style='color:green';>Confirmed!</h3>")
+
+            database.ref().on("child_added", function (snapshot) {
+                console.log("snapshot key is " + snapshot.key);
+                var snapshotKey = snapshot.key;
+                window.snapshotKey = snapshotKey; 
+                console.log("firebase:  SECOND PLAYER's choice is " + snapshot.val().choice);
+                playerTwoChoice = snapshot.val().choice;
+            });
+        }
+        //when this is clicked, modifies Choice variable.  user can keep clicking until they decide their final choice.  
+        $(".selectionButtonP2").on("click", function (event) {
+            event.preventDefault();
+
+            if ($(this).attr("id") === "rock-button2") {
+                console.log("Rock has been chosen");
+                choice = "rock";
+                $(".player-two-selection").html("<h3>Player two choice: " + choice + "</h3>")
+            }
+            else if ($(this).attr("id") === "paper-button2") {
+                console.log("Paper has been chosen");
+                choice = "paper";
+                $(".player-two-selection").html("<h3>Player two choice: " + choice + "</h3>")
+            }
+            else if ($(this).attr("id") === "scissors-button2") {
+                console.log("Scissors has been chosen");
+                choice = "scissors";
+                $(".player-two-selection").html("<h3>Player two choice: " + choice + "</h3>")
+            }
+            
+        });
+        // Now when this is clicked, the Choice is pushed to firebase (choice becomes permanent)
+        $("#submit-button2").on("click", function (event) {
+            event.preventDefault();
+            newGamePush();
+        });
+        
+    }
+
+
+    function compareChoices() {
+
+    }
+
+
+
+
     function nextGames() {
         function notNewGameSet() {
             database.ref().set({

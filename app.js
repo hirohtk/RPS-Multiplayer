@@ -30,8 +30,8 @@ $(document).ready(function () {
     var playerOneDone = false;
     var playerTwoDone = false;
 
-    firstPlayerfirstGame();
-    secondPlayerFirstGame();
+    firstPlayer();
+    secondPlayer();
 
     var timer = 5;
     var intervalId;
@@ -49,9 +49,14 @@ $(document).ready(function () {
         $("#winnerIsP1").empty();
         $("#winnerIsP2").empty();
         $("#tieGame").empty();
+        timer = 5;
+        playerOneChoice = "";
+        playerTwoChoice = "";
+        playerOneDone = false;
+        playerTwoDone = false;
     }
 
-    function firstPlayerfirstGame() {
+    function firstPlayer() {
         var choice; 
 
         function newGamePush() {
@@ -67,6 +72,7 @@ $(document).ready(function () {
                 console.log("-----------------------------------------------------------")
                 playerOneChoice = Snapshot.val().choice}
             );
+            
         }
 
         
@@ -93,6 +99,7 @@ $(document).ready(function () {
         });
         // Now when this is clicked, the Choice is pushed to firebase (choice becomes permanent)
         $("#submit-button1").on("click", function (event) {
+            $(".selectionButtonP1").unbind("click");
             event.preventDefault();
             newGamePush();
             playerOneDone = true;
@@ -101,7 +108,7 @@ $(document).ready(function () {
         
     }
 
-    function secondPlayerFirstGame() {
+    function secondPlayer() {
         var choice; 
 
         function newGamePush() {
@@ -116,6 +123,7 @@ $(document).ready(function () {
                 console.log("-----------------------------------------------------------")
                 playerTwoChoice = Snapshot.val().choice}
             );
+            
             
         }
         //when this is clicked, modifies Choice variable.  user can keep clicking until they decide their final choice.  
@@ -141,6 +149,7 @@ $(document).ready(function () {
         });
         // Now when this is clicked, the Choice is pushed to firebase (choice becomes permanent)
         $("#submit-button2").on("click", function (event) {
+            
             event.preventDefault();
             newGamePush();
             playerTwoDone = true;

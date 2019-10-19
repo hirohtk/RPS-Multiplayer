@@ -42,6 +42,14 @@ $(document).ready(function () {
             compareChoices();
         }
     }
+
+    function gameReset() {
+        $(".player-one-selection").empty();
+        $(".player-two-selection").empty();
+        $("#winnerIsP1").empty();
+        $("#winnerIsP2").empty();
+    }
+
     function firstPlayerfirstGame() {
         var choice; 
 
@@ -87,7 +95,7 @@ $(document).ready(function () {
             event.preventDefault();
             newGamePush();
             playerOneDone = true;
-            setTimeout(validateForBothInputs, 500); // NEEDED THIS - 
+            setTimeout(validateForBothInputs, 500); // NEEDED THIS - VALIDATION WOULD HAPPEN BEFORE THE FIREBASE CALL COULD COME BACK!!!
         });
         
     }
@@ -135,7 +143,7 @@ $(document).ready(function () {
             event.preventDefault();
             newGamePush();
             playerTwoDone = true;
-            setTimeout(validateForBothInputs, 500);
+            setTimeout(validateForBothInputs, 500);  // NEEDED THIS - VALIDATION WOULD HAPPEN BEFORE THE FIREBASE CALL COULD COME BACK!!!
         });
     }
 
@@ -143,9 +151,24 @@ $(document).ready(function () {
         console.log("TIME TO COMPARE CHOICES MENG");
         console.log("Now comparing... Player One's choice is " + playerOneChoice);
         console.log("Now comparing... Player Two's choice is " + playerTwoChoice);
+
+        if (playerOneChoice === "paper" && playerTwoChoice === "rock" || playerOneChoice === "rock" && playerTwoChoice === "scissors" || playerOneChoice === "scissors" && playerTwoChoice == "paper") {
+            $("#winnerIsP1").html("<h3 style='color:gold';>Winner is... PLAYER ONE!</h3>")
+            player1Wins++;
+            console.log("Player one now has " + player1Wins + " wins.");
+        }
+        else if (playerOneChoice === "rock" && playerTwoChoice === "paper" || playerOneChoice === "scissors" && playerTwoChoice === "rock" || playerOneChoice === "paper" && playerTwoChoice === "scissors") {
+            $("#winnerIsP2").html("<h3 style='color:gold';>Winner is... PLAYER TWO!</h3>")
+            player2Wins++;
+            console.log("Player two now has " + player2Wins + " wins.");
+        }
+        else {
+            alert("Encountered a win condition I didn't expect!")
+        }
+
+        
+        setTimeOut(gameReset, 5000);
     }
-
-
 
 
     function nextGames() {
